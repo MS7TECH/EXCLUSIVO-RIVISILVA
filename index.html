@@ -685,11 +685,15 @@
         let dataSelecionada = null, horaSelecionada = null;
         let configPadrao = { inicio: '09:00', fim: '18:00', intervalo: 40 };
         let bloqueios = [], excecoes = {};
-        let mesVisualizado = new Date();
+        // Página exclusiva: inicia em Dezembro/2026
+        let mesVisualizado = new Date(2026, 11, 1);
         let horariosEspeciaisDoDia = [];
         let precosExtrasMap = {};
         let extraDataSelecionada = null;
         let extraHoraSelecionada = null;
+        // Dezembro/2026 sempre liberado nesta página
+        const MES_EXCLUSIVO_ANO = 2026;
+        const MES_EXCLUSIVO_MES = 12;
 
         // Tenta iniciar a música logo que a página carrega na cortina (respeitando a política do navegador)
         window.addEventListener('DOMContentLoaded', () => {
@@ -798,7 +802,7 @@
 
             const { data: configDB } = await _supabase.from('agenda_config').select('*').eq('id', 1).maybeSingle();
             const { data: exDB } = await _supabase.from('agenda_excecoes').select('*').eq('data', dataS).maybeSingle();
-            const { data: extrasDB } = await _supabase.from('horarios_extras').select('horario').eq('data', dataS);
+            const { data: especiaisDB } = await _supabase.from('horarios_especiais_exclusiva').select('horario').eq('data', dataS);
 
             const hI = String(exDB?.hora_inicio || configDB?.hora_inicio || configPadrao.inicio).slice(0, 5);
             const hF = String(exDB?.hora_fim || configDB?.hora_fim || configPadrao.fim).slice(0, 5);
@@ -816,11 +820,6 @@
                 totalMin += intervalo;
             }
 
-            const extrasList = (extrasDB || []).map(e => String(e.horario).substring(0, 5));
-            extrasList.forEach(ex => {
-                if (!horariosReaisPermitidos.includes(ex)) horariosReaisPermitidos.push(ex);
-            });
-            const { data: especiaisDB } = await _supabase.from('horarios_especiais').select('horario').eq('data', dataS);
             (especiaisDB || []).forEach(e => {
                 const hx = String(e.horario).substring(0, 5);
                 if (!horariosReaisPermitidos.includes(hx)) horariosReaisPermitidos.push(hx);
@@ -845,7 +844,7 @@
                 return false;
             }
 
-            const { data: bloqueioPontualCheck } = await _supabase.from('horarios_bloqueados_pontuais')
+            const { data: bloqueioPontualCheck } = await _supabase.from('horarios_bloqueados_pontuais_exclusiva')
                 .select('id, horario')
                 .eq('data', dataS);
 
@@ -874,11 +873,14 @@
             await atualizarCalendario();
             if (window.lucide) lucide.createIcons();
             
-            _supabase.channel('public:agendamentos_e_bloqueios')
+            _supabase.channel('public:agendamentos_e_bloqueios_exclusiva')
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'agendamentos' }, () => {
                     if (dataSelecionada) carregarHorariosElementoSelecionado();
                 })
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'horarios_bloqueados_pontuais' }, () => {
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'horarios_bloqueados_pontuais_exclusiva' }, () => {
+                    if (dataSelecionada) carregarHorariosElementoSelecionado();
+                })
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'horarios_especiais_exclusiva' }, () => {
                     if (dataSelecionada) carregarHorariosElementoSelecionado();
                 })
                 .subscribe();
@@ -915,7 +917,7 @@
             const mesAnoKey = `${ano}-${mes}`;
             const [resConfig, resBloqueios, resExcecoes, resMeses] = await Promise.all([
                 _supabase.from('agenda_config').select('*').eq('id', 1).maybeSingle(),
-                _supabase.from('agenda_bloqueada').select('data_interditada'),
+                _supabase.from('agenda_bloqueada_exclusiva').select('data_interditada'),
                 _supabase.from('agenda_excecoes').select('*'),
                 _supabase.from('meses_liberados').select('liberado').eq('mes_ano', mesAnoKey).maybeSingle()
             ]);
@@ -938,7 +940,10 @@
                     };
                 });
             }
-            if (resMeses.data?.liberado !== true) {
+            // Página exclusiva: Dezembro/2026 sempre aberto
+            const ehMesExclusivo = (ano === MES_EXCLUSIVO_ANO && Number(mes) === MES_EXCLUSIVO_MES);
+            const mesLiberado = ehMesExclusivo || (resMeses.data?.liberado === true);
+            if (!mesLiberado) {
                 container.innerHTML = `<div class="col-span-7 flex flex-col items-center py-10 opacity-60"><i data-lucide="lock" class="w-8 h-8 mb-2 gold-text"></i><p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest text-center">Agenda fechada para este mês.</p></div>`;
             } else { 
                 renderCalendar(mesVisualizado);
@@ -976,14 +981,13 @@
             const { data: ocupados } = await _supabase.from('agendamentos').select('horario').eq('data_atendimento', data).not('status', 'eq', 'Cancelado');
             const ocupadosList = ocupados?.map(o => o.horario.substring(0, 5)) || [];
 
-            const { data: inativadosData } = await _supabase.from('horarios_bloqueados_pontuais').select('horario').eq('data', data);
-            const horariosInativados = (inativadosData || []).map(i => i.horario.substring(0, 5));
+            // Tabelas EXCLUSIVAS (não misturam com a agenda tradicional)
+            const { data: inativadosData } = await _supabase.from('horarios_bloqueados_pontuais_exclusiva').select('horario').eq('data', data);
+            const horariosInativados = (inativadosData || []).map(i => String(i.horario).substring(0, 5));
 
-            const { data: extrasData } = await _supabase.from('horarios_extras').select('horario').eq('data', data);
-            const horariosExtras = (extrasData || []).map(e => e.horario.substring(0, 5));
-
-            const { data: especiaisData } = await _supabase.from('horarios_especiais').select('horario').eq('data', data);
+            const { data: especiaisData } = await _supabase.from('horarios_especiais_exclusiva').select('horario').eq('data', data);
             const horariosEspeciais = (especiaisData || []).map(e => String(e.horario).substring(0, 5));
+            const horariosExtras = [];
             horariosEspeciaisDoDia = [...horariosEspeciais];
 
             const { data: exDiaFresh } = await _supabase.from('agenda_excecoes').select('*').eq('data', data).maybeSingle();
