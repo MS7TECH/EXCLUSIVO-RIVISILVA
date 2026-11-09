@@ -7,7 +7,7 @@
     <meta http-equiv="expires" content="0">
     <meta http-equiv="pragma" content="no-cache">
 
-    <title>Agendamento Exclusivo | Rivi Silva Esmalteria</title>
+    <title>Agendamento Exclusivo Fidelidade | Rivi Silva Esmalteria</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -21,9 +21,6 @@
             position: relative;
         }
 
-        /* =========================================================
-           ESTILOS AVANÇADOS DA CORTINA NATALINA DE LUXO
-           ========================================================= */
         #christmas-curtain-overlay {
             position: fixed;
             inset: 0;
@@ -35,7 +32,6 @@
             background-color: rgba(0, 0, 0, 0.4);
         }
 
-        /* Painel da Cortina Veludo Vermelho Imperial */
         .curtain-panel {
             position: absolute;
             top: 0;
@@ -61,7 +57,6 @@
             transform-origin: right center;
         }
 
-        /* Textura realista de dobras de tecido tridimensional */
         .curtain-panel::after {
             content: '';
             position: absolute;
@@ -76,7 +71,6 @@
             pointer-events: none;
         }
 
-        /* Cordão Dourado de Amarração que surge na abertura */
         .curtain-tieback {
             position: absolute;
             top: 50%;
@@ -92,7 +86,6 @@
         .curtain-left .curtain-tieback { right: 20px; }
         .curtain-right .curtain-tieback { left: 20px; }
 
-        /* Guirlanda / Festão de Natal no Topo com Iluminação */
         .garland-header {
             position: absolute;
             top: 0;
@@ -109,7 +102,6 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.6);
         }
 
-        /* Lâmpadas Natalinas Piscantes Premium */
         .christmas-light {
             width: 10px;
             height: 14px;
@@ -126,7 +118,6 @@
             100% { opacity: 1; transform: scale(1.15); filter: brightness(1.3); }
         }
 
-        /* Cartão Central Branco com Logo */
         .curtain-welcome-card {
             position: relative;
             z-index: 3;
@@ -147,7 +138,6 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* Botão com Efeito Shimmer Dourado */
         .btn-shimmer {
             position: relative;
             overflow: hidden;
@@ -173,7 +163,6 @@
             100% { transform: translate(100%, 100%) rotate(30deg); }
         }
 
-        /* Animação de Abertura Realista da Cortina */
         #christmas-curtain-overlay.open .curtain-left {
             transform: translateX(-100%) scaleX(0.7);
             filter: brightness(0.7);
@@ -194,7 +183,6 @@
             pointer-events: none;
         }
 
-        /* Neve branca */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -280,45 +268,6 @@
         #modalExtra { display: none; }
         #modalExtra.open { display: flex; }
 
-        .tour-highlight {
-            position: relative !important;
-            z-index: 70 !important;
-            box-shadow: 0 0 0 4px #D4AF37, 0 0 0 8px rgba(212,175,55,0.25) !important;
-            border-radius: 16px !important;
-            animation: tourPulse 1.4s ease-in-out infinite;
-        }
-        @keyframes tourPulse {
-            0%, 100% { box-shadow: 0 0 0 4px #D4AF37, 0 0 0 8px rgba(212,175,55,0.2); }
-            50% { box-shadow: 0 0 0 4px #D4AF37, 0 0 0 12px rgba(212,175,55,0.35); }
-        }
-        #tourOverlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.55);
-            z-index: 65;
-            backdrop-filter: blur(2px);
-        }
-        #tourOverlay.open { display: block; }
-        #tourCard {
-            display: none;
-            position: fixed;
-            left: 50%;
-            bottom: 24px;
-            transform: translateX(-50%);
-            z-index: 80;
-            width: calc(100% - 32px);
-            max-width: 420px;
-        }
-        #tourCard.open { display: block; }
-        #tourFab {
-            position: fixed;
-            bottom: 20px;
-            right: 16px;
-            z-index: 55;
-        }
-
-        /* Selo exclusivo */
         .exclusive-badge {
             display: inline-flex;
             align-items: center;
@@ -335,7 +284,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
-        /* Luzinhas douradas sutis */
         .string-lights {
             display: flex;
             justify-content: center;
@@ -363,12 +311,9 @@
 </head>
 <body class="p-4 md:p-8 flex flex-col items-center min-h-screen">
 
-    <!-- ELEMENTO DE ÁUDIO DE FUNDO (Inicia silenciado/toca a partir do 0:55) -->
     <audio id="bg-music" src="musica_natal.mp3#t=55" loop preload="auto"></audio>
 
-    <!-- CORTINA NATALINA DE APRESENTAÇÃO PREMIUM -->
     <div id="christmas-curtain-overlay">
-        <!-- Festão Iluminado no Topo -->
         <div class="garland-header">
             <span class="christmas-light light-gold"></span>
             <span class="christmas-light light-red"></span>
@@ -381,7 +326,6 @@
             <span class="christmas-light light-gold"></span>
         </div>
         
-        <!-- Painéis da Cortina de Veludo -->
         <div class="curtain-panel curtain-left">
             <div class="curtain-tieback"></div>
         </div>
@@ -389,25 +333,23 @@
             <div class="curtain-tieback"></div>
         </div>
 
-        <!-- Cartão Central Branco com Logo e Aviso de Som -->
         <div class="curtain-welcome-card">
             <img src="logo.png" alt="Rivi Silva Esmalteria" class="h-16 md:h-20 object-contain mx-auto mb-3">
             
-            <!-- Aviso para aumentar o som -->
             <div class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full mb-3 text-amber-800 text-[10px] font-bold tracking-wide">
                 <i data-lucide="volume-2" class="w-3.5 h-3.5 text-[#D4AF37]"></i>
                 <span>Aumente o som para uma experiência mágica! 🎶</span>
             </div>
 
-            <p class="text-[9px] gold-text font-bold uppercase tracking-[0.3em] mb-1">Edição Especial de Festas</p>
+            <p class="text-[9px] gold-text font-bold uppercase tracking-[0.3em] mb-1">Edição Clientes Fidelidade</p>
             <h2 class="text-xl md:text-2xl font-bold text-zinc-900 mb-2 leading-tight">
-                Bem-vinda ao Agendamento exclusivo!
+                Antecipação de Dezembro!
             </h2>
             <p class="text-xs text-zinc-600 leading-relaxed mb-6 max-w-xs mx-auto">
-                Um momento único reservado para renovar sua autoestima nesta temporada festiva.
+                Acesso antecipado exclusivo para agendar o seu momento especial de fim de ano.
             </p>
             <button onclick="abrirCortinaNatalina()" class="btn-shimmer w-full gold-bg text-zinc-950 font-black py-4 rounded-xl uppercase text-xs tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2">
-                <span>Realizar Agendamento</span>
+                <span>Acessar Agendamento</span>
                 <i data-lucide="chevron-right" class="w-4 h-4"></i>
             </button>
         </div>
@@ -428,87 +370,36 @@
         <img src="logo.png" alt="Rivi Silva Esmalteria" class="h-24 md:h-32 object-contain">
         
         <div class="exclusive-badge mt-1">
-            <span>✦</span> Acesso Exclusivo <span>✦</span>
+            <span>✦</span> Clientes Fidelidade <span>✦</span>
         </div>
 
-        <p class="text-[10px] gold-text font-bold uppercase tracking-[0.4em] mb-1">Design de Luxo</p>
-        
-        <div class="flex gap-8 items-center justify-center">
-            <a href="https://www.instagram.com/esmalteria_rivi?igsh=MWx2dzNxenRmYzF0bQ==" target="_blank" class="hover:scale-125 transition-transform duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-            </a>
-            <a href="https://api.whatsapp.com/send?phone=5571992447638" class="hover:scale-125 transition-transform duration-300">
-                <i data-lucide="smartphone" class="text-[#D4AF37]"></i>
-            </a>
-            <a href="#" target="_blank" class="hover:scale-125 transition-transform duration-300">
-                <i data-lucide="map-pin" class="text-[#D4AF37]"></i>
-            </a>
-        </div>
+        <p class="text-[10px] gold-text font-bold uppercase tracking-[0.4em] mb-1">Agenda Antecipada de Dezembro</p>
     </div>
 
     <main class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         
-        <!-- Coluna Esquerda -->
         <div class="flex flex-col gap-6 items-center lg:items-start lg:pr-10">
             <div class="flex flex-col lg:flex-row gap-6 items-center lg:items-start w-full">
                 <img id="carouselImg" src="foto_perfil.jpg" alt="Rivi Silva" class="perfil-img w-full lg:w-1/2 rounded-3xl lg:rounded-none transition-opacity duration-500 opacity-100">
                 <div class="flex flex-col gap-5 mt-4 lg:mt-20">
                     <h2 class="text-4xl md:text-5xl font-light text-zinc-900 leading-tight text-center lg:text-left">
-                        Um momento só seu. <span class="font-semibold gold-text">Agendamento exclusivo ✨</span>
+                        Agenda Especial. <span class="font-semibold gold-text">Dezembro VIP ✨</span>
                     </h2>
-                    <p class="text-zinc-600 text-lg italic border-l-2 border-[#D4AF37] pl-4">"Unhas feitas, auto-estima renovada."</p>
-                    <p class="text-xs text-zinc-400 leading-relaxed max-w-sm">
-                        Página reservada para clientes selecionadas. Atendimento mais próximo e com prioridade nesta temporada de festas.
-                    </p>
+                    <p class="text-zinc-600 text-lg italic border-l-2 border-[#D4AF37] pl-4">"Garantindo a sua beleza nas festas."</p>
                 </div>
-            </div>
-
-            <!-- Carrossel de Inspirações -->
-            <div class="w-full clean-card p-6 rounded-3xl space-y-4 mt-4">
-                <div class="text-center space-y-1">
-                    <h3 class="text-lg font-semibold gold-text uppercase tracking-widest flex items-center justify-center gap-2">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i> Catálogo de Inspirações
-                    </h3>
-                    <p class="text-xs text-zinc-500">Clique na foto para ampliar, tire um print e mande no WhatsApp!</p>
-                </div>
-
-                <div class="inspiration-carousel pt-2">
-                    <script>
-                        for(let i = 1; i <= 23; i++) {
-                            document.write(`
-                                <div onclick="abrirModal('FT${i}.jpeg')" class="inspiration-item relative group rounded-2xl overflow-hidden border border-zinc-200 bg-zinc-50 aspect-square shadow-sm flex-shrink-0">
-                                    <img src="FT${i}.jpeg" alt="Design ${i}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-1 text-center">
-                                        <span class="text-[9px] text-white font-bold uppercase tracking-wider">Ampliar 🔍</span>
-                                    </div>
-                                </div>
-                            `);
-                        }
-                    </script>
-                </div>
-
-                <a href="https://api.whatsapp.com/send?phone=5571992447638&text=Olá!%20Me%20interessei%20por%20um%20modelo%20do%20catálogo,%20segue%20o%20print!" target="_blank" class="w-full bg-zinc-900 text-white font-bold py-3 rounded-xl shadow-md uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all">
-                    <i data-lucide="smartphone" class="w-4 h-4 text-[#D4AF37]"></i> Enviar Print no WhatsApp
-                </a>
             </div>
         </div>
 
-        <!-- Coluna Direita: Agendamento -->
         <div class="w-full clean-card p-6 md:p-10 rounded-3xl space-y-6">
             <div class="text-center space-y-1 mb-2">
                 <div class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200/70 px-3 py-1 rounded-full mb-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
-                    <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Exclusivo</span>
+                    <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Antecipado</span>
                 </div>
                 <h3 class="text-xl font-semibold gold-text uppercase tracking-widest">Solicitar Agendamento</h3>
-                <p class="text-[11px] text-zinc-400">Reservado para clientes selecionadas</p>
             </div>
 
-            <div id="tourStepDados" class="space-y-4">
+            <div class="space-y-4">
                 <div class="form-input-container">
                     <i data-lucide="user" class="input-icon"></i>
                     <input id="nome" type="text" oninput="this.value = nameMask(this.value)" placeholder="Seu Nome Completo" class="form-input w-full p-4 rounded-xl uppercase text-xs font-bold bg-zinc-50">
@@ -518,20 +409,9 @@
                     <i data-lucide="smartphone" class="input-icon"></i>
                     <input id="whatsapp_input" type="tel" maxlength="15" oninput="this.value = phoneMask(this.value)" placeholder="(71) 00000-0000" class="form-input w-full p-4 rounded-xl text-xs font-bold bg-zinc-50">
                 </div>
-                
-                <div class="form-input-container">
-                    <i data-lucide="cake" class="input-icon z-10"></i>
-                    <input id="aniversario_input" type="text" maxlength="5" oninput="this.value = birthdayMask(this.value); toggleMarquee(this.value)" onfocus="document.getElementById('lbl-marquee').style.display='none'" onblur="toggleMarquee(this.value)" class="form-input w-full p-4 rounded-xl text-xs font-bold bg-zinc-50 relative z-0">
-                    
-                    <div id="lbl-marquee" class="marquee-container text-zinc-400 text-xs font-bold">
-                        <marquee scrollamount="2" scrolldelay="30" behavior="scroll" direction="left" class="w-full">
-                            Insira Sua Data de Aniversário (DD/MM) e Concorra a descontos especiais no seu mês! 🎂 [Opcional]
-                        </marquee>
-                    </div>
-                </div>
             </div>
 
-            <div id="tourStepServicos" class="mt-6">
+            <div class="mt-6">
                 <label class="block text-xs font-bold text-zinc-400 uppercase mb-2 flex items-center gap-2">
                     <i data-lucide="sparkles" class="w-3 h-3 gold-text"></i> Serviços
                 </label>
@@ -544,7 +424,7 @@
                 </div>
             </div>
 
-            <div id="tourStepData" class="pt-4 border-t">
+            <div class="pt-4 border-t">
                 <div class="flex items-center justify-between mb-4 px-2">
                     <button onclick="mudarMes(-1)" class="gold-text p-1 hover:bg-zinc-100 rounded-full transition-all"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
                     <label id="mesAnoAtual" class="block text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
@@ -561,7 +441,7 @@
                 </label>
                 <div id="time-slots" class="grid grid-cols-3 gap-2 pb-4"></div>
 
-                <div id="tourStepConfirmar" class="p-5 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col items-center gap-3">
+                <div class="p-5 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col items-center gap-3">
                     <p class="text-[11px] text-amber-800 font-bold uppercase text-center leading-relaxed">
                         Para confirmar o agendamento envie um sinal de <span class="text-lg block font-black">R$ 50,00</span>
                     </p>
@@ -582,178 +462,25 @@
         </div>
     </main>
 
-    <!-- Modal para Ampliar a Foto -->
-    <div id="fotoModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="fecharModal()">
-        <div class="relative max-w-lg w-full flex flex-col items-center" onclick="event.stopPropagation()">
-            <button onclick="fecharModal()" class="absolute -top-12 right-0 text-white hover:text-[#D4AF37] transition-colors p-2">
-                <i data-lucide="x" class="w-8 h-8"></i>
-            </button>
-            <img id="imgModalSrc" src="" alt="Inspiração Ampliada" class="w-full max-h-[80vh] object-contain rounded-2xl border border-zinc-700 shadow-2xl bg-black">
-            <p class="text-white text-xs font-semibold mt-3 tracking-widest uppercase text-center bg-zinc-900/80 px-4 py-2 rounded-full border border-zinc-800">
-                📸 Tire um print e envie no WhatsApp!
-            </p>
-        </div>
-    </div>
-
-    <!-- Modal HORÁRIO EXTRA -->
-    <div id="modalExtra" class="fixed inset-0 bg-black/70 z-[60] items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-md max-h-[92vh] overflow-y-auto rounded-3xl shadow-2xl border border-amber-200 relative" onclick="event.stopPropagation()">
-            <button onclick="fecharModalExtra()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 font-bold z-10">✕</button>
-            
-            <div class="p-6 pt-8 space-y-5">
-                <div class="text-center space-y-2">
-                    <div class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">
-                        <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                        <span class="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest">Horário Extra</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-zinc-900">Você selecionou um horário extra</h3>
-                    <p class="text-xs text-zinc-500 leading-relaxed px-2">
-                        Este horário está <strong>fora do expediente padrão</strong>. Os valores dos serviços são diferentes. Ao continuar, você declara estar ciente da atualização de preços.
-                    </p>
-                    <p class="text-sm font-bold text-[#D4AF37]" id="extraInfoDataHora">--</p>
-                </div>
-
-                <div class="space-y-3">
-                    <div class="form-input-container">
-                        <i data-lucide="user" class="input-icon"></i>
-                        <input id="extra_nome" type="text" oninput="this.value = nameMask(this.value)" placeholder="Seu Nome Completo" class="form-input w-full p-4 rounded-xl uppercase text-xs font-bold bg-zinc-50">
-                    </div>
-                    <div class="form-input-container">
-                        <i data-lucide="smartphone" class="input-icon"></i>
-                        <input id="extra_whatsapp" type="tel" maxlength="15" oninput="this.value = phoneMask(this.value)" placeholder="(71) 00000-0000" class="form-input w-full p-4 rounded-xl text-xs font-bold bg-zinc-50">
-                    </div>
-                    <div class="form-input-container">
-                        <i data-lucide="cake" class="input-icon"></i>
-                        <input id="extra_aniversario" type="text" maxlength="5" oninput="this.value = birthdayMask(this.value)" placeholder="Aniversário DD/MM (opcional)" class="form-input w-full p-4 rounded-xl text-xs font-bold bg-zinc-50">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-2 tracking-widest">Serviços (valores do horário extra)</label>
-                    <div id="extraListaServicos" class="grid grid-cols-1 gap-1 max-h-40 overflow-y-auto border border-amber-100 rounded-xl p-2 bg-amber-50/30 text-[10px]"></div>
-                    <div class="mt-3 p-4 bg-zinc-900 rounded-xl flex justify-between items-center text-white">
-                        <span class="text-zinc-400 font-bold text-xs uppercase">Total extra:</span>
-                        <span id="extraTotalDisplay" class="text-xl font-bold gold-text">R$ 0,00</span>
-                    </div>
-                </div>
-
-                <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-center space-y-2">
-                    <p class="text-[10px] text-amber-800 font-bold uppercase leading-relaxed">
-                        Sinal de confirmação: <span class="text-base font-black block">R$ 50,00</span>
-                    </p>
-                    <div class="flex items-center gap-2 bg-white p-2 rounded-xl border border-amber-200">
-                        <input type="text" value="(71) 99244-7638" readonly class="bg-transparent text-center text-xs font-bold text-zinc-700 w-full outline-none">
-                        <button type="button" onclick="copyPix()" class="gold-bg text-zinc-900 text-[10px] font-bold px-3 py-2 rounded-lg">COPIAR</button>
-                    </div>
-                </div>
-
-                <button id="btnExtraConfirmar" onclick="finalizarAgendamentoExtra()" class="w-full bg-[#25D366] text-white font-black py-4 rounded-xl shadow-lg uppercase text-[11px] tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all">
-                    <i data-lucide="check-circle" class="w-5 h-5"></i>
-                    <span id="btnExtraText">Confirmar horário extra 💅</span>
-                </button>
-                <p class="text-[9px] text-center text-zinc-400 font-bold uppercase">Ao confirmar você declara ciência dos valores do horário extra</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Overlay + card do tutorial -->
-    <div id="tourOverlay"></div>
-    <div id="tourCard" class="clean-card rounded-3xl p-5 shadow-2xl border border-amber-200 bg-white">
-        <div class="flex items-start justify-between gap-3 mb-3">
-            <div>
-                <p id="tourStepLabel" class="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest">Passo 1 de 5</p>
-                <h4 id="tourTitle" class="text-lg font-bold text-zinc-900 mt-1">Bem-vinda!</h4>
-            </div>
-            <button type="button" onclick="pularTour()" class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider hover:text-zinc-700">Pular</button>
-        </div>
-        <p id="tourText" class="text-sm text-zinc-600 leading-relaxed mb-5">Vamos te guiar em poucos passos para agendar com facilidade.</p>
-        <div class="flex items-center gap-2 mb-4" id="tourDots"></div>
-        <div class="flex gap-2">
-            <button type="button" id="tourBtnVoltar" onclick="tourVoltar()" class="hidden flex-1 py-3 rounded-xl border border-zinc-200 text-xs font-black uppercase text-zinc-600">Voltar</button>
-            <button type="button" id="tourBtnProx" onclick="tourProximo()" class="flex-1 py-3 rounded-xl gold-bg text-zinc-900 text-xs font-black uppercase shadow-md">Começar</button>
-        </div>
-    </div>
-    <button type="button" id="tourFab" onclick="iniciarTour(true)" class="hidden px-4 py-3 rounded-full bg-zinc-900 text-white text-[10px] font-black uppercase tracking-wider shadow-xl border border-[#D4AF37]/40">
-        ? Ajuda
-    </button>
-
     <script>
         const supabaseUrl = 'https://rahubkowehwtvditbhlx.supabase.co';
         const supabaseKey = 'sb_publishable_wKbs4gYVURdIR6Cafm8qFA_tUZZTIKo'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         let dataSelecionada = null, horaSelecionada = null;
-        let configPadrao = { inicio: '08:00', fim: '17:00', intervalo: 40 };
+        let configPadrao = { inicio: '09:00', fim: '18:00', intervalo: 40 };
         let bloqueios = [], excecoes = {};
-        // Página exclusiva: inicia em Dezembro/2026
         let mesVisualizado = new Date(2026, 11, 1);
-        let horariosEspeciaisDoDia = [];
-        let precosExtrasMap = {};
-        let extraDataSelecionada = null;
-        let extraHoraSelecionada = null;
-        // Dezembro/2026 sempre liberado nesta página
-        const MES_EXCLUSIVO_ANO = 2026;
-        const MES_EXCLUSIVO_MES = 12;
 
-        // Tenta iniciar a música logo que a página carrega na cortina (respeitando a política do navegador)
-        window.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('bg-music');
-            if (audio) {
-                audio.currentTime = 55; // Garante o segundo 0:55 exato
-                audio.volume = 0.45;
-                audio.play().catch(e => {
-                    console.log("Reprodução automática bloqueada pelo browser até haver clique:", e);
-                });
-            }
-        });
-
-        // FUNÇÃO DE ABERTURA DA CORTINA E GARANTIA DO ÁUDIO
         function abrirCortinaNatalina() {
             const audio = document.getElementById('bg-music');
-            if (audio) {
-                if (audio.paused) {
-                    audio.currentTime = 55;
-                }
-                audio.volume = 0.45;
-                audio.play().catch(err => console.log("Erro ao reproduzir áudio:", err));
-            }
-
+            if (audio) { audio.currentTime = 55; audio.volume = 0.45; audio.play().catch(e => {}); }
             const overlay = document.getElementById('christmas-curtain-overlay');
             overlay.classList.add('open');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 1400);
+            setTimeout(() => { overlay.style.display = 'none'; }, 1400);
         }
 
-        function criarNeve() {
-            const container = document.getElementById('snow-container');
-            const quantidade = window.innerWidth < 768 ? 22 : 35;
-            for (let i = 0; i < quantidade; i++) {
-                const flake = document.createElement('div');
-                flake.className = 'snowflake';
-                flake.innerHTML = ['❄', '❅', '❆'][Math.floor(Math.random() * 3)];
-                flake.style.left = Math.random() * 100 + 'vw';
-                flake.style.fontSize = (Math.random() * 0.85 + 0.5) + 'rem';
-                flake.style.animationDuration = (Math.random() * 9 + 7) + 's';
-                flake.style.animationDelay = (Math.random() * 9) + 's';
-                flake.style.opacity = Math.random() * 0.5 + 0.35;
-                container.appendChild(flake);
-            }
-        }
-
-        function abrirModal(src) {
-            document.getElementById('imgModalSrc').src = src;
-            document.getElementById('fotoModal').classList.remove('hidden');
-        }
-
-        function fecharModal() {
-            document.getElementById('fotoModal').classList.add('hidden');
-        }
-
-        function nameMask(v) {
-            return v.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
-        }
-
+        function nameMask(v) { return v.replace(/[^a-zA-ZÀ-ÿ\s]/g, ""); }
         function phoneMask(v) {
             v = v.replace(/\D/g, "");
             if (v.length > 11) v = v.substring(0, 11);
@@ -762,59 +489,18 @@
             return v;
         }
 
-        function birthdayMask(v) {
-            v = v.replace(/\D/g, "");
-            if (v.length > 4) v = v.substring(0, 4);
-            if (v.length > 2) {
-                v = v.substring(0, 2) + "/" + v.substring(2);
-            }
-            return v;
-        }
-
-        function toggleMarquee(val) {
-            const marquee = document.getElementById('lbl-marquee');
-            if(val.length > 0) {
-                marquee.style.display = 'none';
-            } else {
-                marquee.style.display = 'flex';
-            }
-        }
-
         function copyPix() {
             const pixVal = document.getElementById('pixKey').value;
             navigator.clipboard.writeText(pixVal).then(() => { alert("Chave PIX copiada! 💅✨"); });
         }
 
         async function validarHorarioNoMomento(dataS, horaS) {
-            const agora = new Date();
-            const hojeStr = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}`;
-            
-            if (dataS === hojeStr) {
-                const [h, m] = horaS.split(':').map(Number);
-                const minutesSelecionado = (h * 60) + m;
-                const minutesAgora = (agora.getHours() * 60) + agora.getMinutes();
-                if (minutesSelecionado <= minutesAgora) {
-                    alert("⚠️ Esse horário expirou! Atualizando horários...");
-                    await carregarHorariosElementoSelecionado();
-                    return false;
-                }
-            }
+            const { data: configDB } = await _supabase.from('dez_agenda_config').select('*').eq('id', 1).maybeSingle();
+            const { data: exDB } = await _supabase.from('dez_agenda_excecoes').select('*').eq('data', dataS).maybeSingle();
 
-            const { data: configDB } = await _supabase.from('agenda_config').select('*').eq('id', 1).maybeSingle();
-            let configEx = null;
-            try {
-                const r = await _supabase.from('agenda_config_exclusiva').select('*').eq('id', 1).maybeSingle();
-                configEx = r.data;
-            } catch (e) {}
-            const { data: exDB } = await _supabase.from('agenda_excecoes').select('*').eq('data', dataS).maybeSingle();
-            const { data: especiaisDB } = await _supabase.from('horarios_especiais_exclusiva').select('horario').eq('data', dataS);
-
-            const baseInicio = configEx?.hora_inicio || configDB?.hora_inicio || configPadrao.inicio;
-            const baseFim = configEx?.hora_fim || configDB?.hora_fim || configPadrao.fim;
-            const baseIntervalo = configEx?.intervalo_minutos || configDB?.intervalo_minutos || configPadrao.intervalo;
-            const hI = String(exDB?.hora_inicio || baseInicio).slice(0, 5);
-            const hF = String(exDB?.hora_fim || baseFim).slice(0, 5);
-            const intervalo = Number(exDB?.intervalo_minutos) || Number(baseIntervalo) || 40;
+            const hI = String(exDB?.hora_inicio || configDB?.hora_inicio || configPadrao.inicio).slice(0, 5);
+            const hF = String(exDB?.hora_fim || configDB?.hora_fim || configPadrao.fim).slice(0, 5);
+            const intervalo = Number(exDB?.intervalo_minutos) || Number(configDB?.intervalo_minutos) || Number(configPadrao.intervalo) || 40;
             const horaSNorm = String(horaS).slice(0, 5);
 
             let horariosReaisPermitidos = [];
@@ -828,14 +514,8 @@
                 totalMin += intervalo;
             }
 
-            (especiaisDB || []).forEach(e => {
-                const hx = String(e.horario).substring(0, 5);
-                if (!horariosReaisPermitidos.includes(hx)) horariosReaisPermitidos.push(hx);
-            });
-
             if (!horariosReaisPermitidos.includes(horaSNorm)) {
-                alert("⚠️ Os horários deste dia foram alterados. Por favor, escolha outro horário.");
-                await carregarHorariosElementoSelecionado();
+                alert("⚠️ Horários alterados para esta data.");
                 return false;
             }
 
@@ -844,69 +524,18 @@
                 .eq('data_atendimento', dataS)
                 .not('status', 'eq', 'Cancelado');
 
-            const jaOcupado = (ocupadoCheck || []).some(o => String(o.horario).slice(0, 5) === horaSNorm);
-            if (jaOcupado) {
-                alert("⚠️ Ops! Este horário acabou de ser reservado por outra cliente. Escolha outro horário disponível.");
-                horaSelecionada = null;
-                await carregarHorariosElementoSelecionado();
-                return false;
-            }
-
-            const { data: bloqueioPontualCheck } = await _supabase.from('horarios_bloqueados_pontuais_exclusiva')
-                .select('id, horario')
-                .eq('data', dataS);
-
-            const bloqueadoPontual = (bloqueioPontualCheck || []).some(b => String(b.horario).slice(0, 5) === horaSNorm);
-            if (bloqueadoPontual) {
-                alert("⚠️ Ops! Este horário foi bloqueado recentemente pela administração. Escolha outro horário.");
-                horaSelecionada = null;
-                await carregarHorariosElementoSelecionado();
+            if ((ocupadoCheck || []).some(o => String(o.horario).slice(0, 5) === horaSNorm)) {
+                alert("⚠️ Este horário já foi reservado.");
                 return false;
             }
 
             return true;
         }
 
-        async function carregarHorariosElementoSelecionado() {
-            if (!dataSelecionada) return;
-            const element = document.querySelector(`.day-selected`);
-            if (element) {
-                await carregarHorarios(element, dataSelecionada);
-            }
-        }
-
         async function init() {
-            criarNeve();
             carregarServicos();
             await atualizarCalendario();
             if (window.lucide) lucide.createIcons();
-            
-            _supabase.channel('public:agendamentos_e_bloqueios_exclusiva')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'agendamentos' }, () => {
-                    if (dataSelecionada) carregarHorariosElementoSelecionado();
-                })
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'horarios_bloqueados_pontuais_exclusiva' }, () => {
-                    if (dataSelecionada) carregarHorariosElementoSelecionado();
-                })
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'horarios_especiais_exclusiva' }, () => {
-                    if (dataSelecionada) carregarHorariosElementoSelecionado();
-                })
-                .subscribe();
-
-            let currentImgIndex = 0;
-            const imagesList = ["foto_perfil.jpg", "foto_perfil2.jpg", "foto_perfil3.jpg", "foto_perfil4.jpg"];
-            const imgElement = document.getElementById("carouselImg");
-            setInterval(() => {
-                if(imgElement) {
-                    imgElement.classList.replace('opacity-100', 'opacity-0');
-                    
-                    setTimeout(() => {
-                        currentImgIndex = (currentImgIndex + 1) % imagesList.length;
-                        imgElement.src = imagesList[currentImgIndex];
-                        imgElement.classList.replace('opacity-0', 'opacity-100');
-                    }, 500);
-                }
-            }, 3500);
         }
 
         async function mudarMes(direcao) {
@@ -923,12 +552,14 @@
             const ano = mesVisualizado.getFullYear();
             const mes = String(mesVisualizado.getMonth() + 1).padStart(2, '0');
             const mesAnoKey = `${ano}-${mes}`;
+
             const [resConfig, resBloqueios, resExcecoes, resMeses] = await Promise.all([
-                _supabase.from('agenda_config').select('*').eq('id', 1).maybeSingle(),
-                _supabase.from('agenda_bloqueada_exclusiva').select('data_interditada'),
-                _supabase.from('agenda_excecoes').select('*'),
-                _supabase.from('meses_liberados').select('liberado').eq('mes_ano', mesAnoKey).maybeSingle()
+                _supabase.from('dez_agenda_config').select('*').eq('id', 1).maybeSingle(),
+                _supabase.from('dez_agenda_bloqueada').select('data_interditada'),
+                _supabase.from('dez_agenda_excecoes').select('*'),
+                _supabase.from('dez_meses_liberados').select('liberado').eq('mes_ano', mesAnoKey).maybeSingle()
             ]);
+
             if (resConfig.data) {
                 configPadrao = {
                     inicio: String(resConfig.data.hora_inicio || '09:00').slice(0, 5),
@@ -936,56 +567,28 @@
                     intervalo: Number(resConfig.data.intervalo_minutos) || 40
                 };
             }
-            // Preferir expediente da agenda exclusiva, se existir
-            try {
-                const { data: cfgEx } = await _supabase.from('agenda_config_exclusiva').select('*').eq('id', 1).maybeSingle();
-                if (cfgEx) {
-                    configPadrao = {
-                        inicio: String(cfgEx.hora_inicio || configPadrao.inicio).slice(0, 5),
-                        fim: String(cfgEx.hora_fim || configPadrao.fim).slice(0, 5),
-                        intervalo: Number(cfgEx.intervalo_minutos) || configPadrao.intervalo
-                    };
-                }
-            } catch (e) { /* tabela pode não existir ainda */ }
             bloqueios = resBloqueios.data ? resBloqueios.data.map(b => b.data_interditada) : [];
-            excecoes = {};
-            if (resExcecoes.data) {
-                resExcecoes.data.forEach(ex => {
-                    if (!ex.data || !ex.hora_inicio || !ex.hora_fim) return;
-                    excecoes[ex.data] = {
-                        inicio: String(ex.hora_inicio).slice(0, 5),
-                        fim: String(ex.hora_fim).slice(0, 5),
-                        intervalo: Number(ex.intervalo_minutos) || null
-                    };
-                });
-            }
-            // Página exclusiva: Dezembro/2026 sempre aberto
-            const ehMesExclusivo = (ano === MES_EXCLUSIVO_ANO && Number(mes) === MES_EXCLUSIVO_MES);
-            const mesLiberado = ehMesExclusivo || (resMeses.data?.liberado === true);
-            if (!mesLiberado) {
-                container.innerHTML = `<div class="col-span-7 flex flex-col items-center py-10 opacity-60"><i data-lucide="lock" class="w-8 h-8 mb-2 gold-text"></i><p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest text-center">Agenda fechada para este mês.</p></div>`;
-            } else { 
+
+            if (resMeses.data?.liberado !== true) {
+                container.innerHTML = `<div class="col-span-7 py-10 text-center text-zinc-400 text-xs font-bold">AGENDA FECHADA PARA ESTE MÊS.</div>`;
+            } else {
                 renderCalendar(mesVisualizado);
             }
-            if (window.lucide) lucide.createIcons();
         }
 
         function renderCalendar(dataBase) {
             const container = document.getElementById('calendarDays');
             const primeiroDia = new Date(dataBase.getFullYear(), dataBase.getMonth(), 1).getDay();
             const ultimoDia = new Date(dataBase.getFullYear(), dataBase.getMonth() + 1, 0).getDate();
-            const hoje = new Date(); hoje.setHours(0,0,0,0);
             container.innerHTML = '';
             for(let i=0; i<primeiroDia; i++) container.innerHTML += '<div></div>';
             for(let d=1; d<=ultimoDia; d++) {
                 const dataStr = `${dataBase.getFullYear()}-${String(dataBase.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                const dataLoop = new Date(dataBase.getFullYear(), dataBase.getMonth(), d);
                 const isBlocked = bloqueios.includes(dataStr);
-                const isPassado = dataLoop < hoje;
                 const box = document.createElement('div');
-                box.className = `day-box ${isPassado || isBlocked ? 'day-busy' : 'day-free'} ${excecoes[dataStr] && !isBlocked ? 'day-special' : ''}`;
+                box.className = `day-box ${isBlocked ? 'day-busy' : 'day-free'}`;
                 box.innerText = d;
-                if(!isPassado && !isBlocked) { box.onclick = () => carregarHorarios(box, dataStr); }
+                if(!isBlocked) { box.onclick = () => carregarHorarios(box, dataStr); }
                 container.appendChild(box);
             }
         }
@@ -996,31 +599,12 @@
             dataSelecionada = data; horaSelecionada = null;
             document.getElementById('section-horarios').classList.remove('hidden');
             document.getElementById('display-date').innerText = data.split('-').reverse().join('/');
-            
+
             const { data: ocupados } = await _supabase.from('agendamentos').select('horario').eq('data_atendimento', data).not('status', 'eq', 'Cancelado');
             const ocupadosList = ocupados?.map(o => o.horario.substring(0, 5)) || [];
 
-            // Tabelas EXCLUSIVAS (não misturam com a agenda tradicional)
-            const { data: inativadosData } = await _supabase.from('horarios_bloqueados_pontuais_exclusiva').select('horario').eq('data', data);
-            const horariosInativados = (inativadosData || []).map(i => String(i.horario).substring(0, 5));
-
-            const { data: especiaisData } = await _supabase.from('horarios_especiais_exclusiva').select('horario').eq('data', data);
-            const horariosEspeciais = (especiaisData || []).map(e => String(e.horario).substring(0, 5));
-            const horariosExtras = [];
-            horariosEspeciaisDoDia = [...horariosEspeciais];
-
-            const { data: exDiaFresh } = await _supabase.from('agenda_excecoes').select('*').eq('data', data).maybeSingle();
-            if (exDiaFresh && exDiaFresh.hora_inicio && exDiaFresh.hora_fim) {
-                excecoes[data] = {
-                    inicio: String(exDiaFresh.hora_inicio).slice(0, 5),
-                    fim: String(exDiaFresh.hora_fim).slice(0, 5),
-                    intervalo: Number(exDiaFresh.intervalo_minutos) || null
-                };
-            }
-
-            const hI = String(excecoes[data]?.inicio || configPadrao.inicio).slice(0, 5);
-            const hF = String(excecoes[data]?.fim || configPadrao.fim).slice(0, 5);
-            const intervaloDia = Number(excecoes[data]?.intervalo) || Number(configPadrao.intervalo) || 40;
+            const hI = configPadrao.inicio;
+            const hF = configPadrao.fim;
             const slotsDiv = document.getElementById('time-slots'); slotsDiv.innerHTML = '';
             
             let [h, m] = hI.split(':').map(Number);
@@ -1028,59 +612,27 @@
             const [hFimLimit, mFimLimit] = hF.split(':').map(Number);
             const totalFim = (hFimLimit * 60) + mFimLimit;
 
-            let horariosPermitidos = [];
             while (totalMin < totalFim) {
-                horariosPermitidos.push(`${String(Math.floor(totalMin / 60)).padStart(2, '0')}:${String(totalMin % 60).padStart(2, '0')}`);
-                totalMin += intervaloDia;
-            }
-
-            horariosExtras.forEach(extra => {
-                if (!horariosPermitidos.includes(extra)) horariosPermitidos.push(extra);
-            });
-            horariosEspeciais.forEach(extra => {
-                if (!horariosPermitidos.includes(extra)) horariosPermitidos.push(extra);
-            });
-
-            horariosPermitidos = horariosPermitidos.filter(h => !horariosInativados.includes(h));
-            horariosPermitidos.sort();
-
-            const agora = new Date();
-            const hojeStr = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}`;
-            const horaAtualMinutos = (agora.getHours() * 60) + agora.getMinutes();
-
-            horariosPermitidos.forEach(hFormat => {
-                const [hr, mn] = hFormat.split(':').map(Number);
-                const minTotal = (hr * 60) + mn;
-                const jaPassou = (data === hojeStr && minTotal <= horaAtualMinutos);
-                const isOcupado = ocupadosList.includes(hFormat) || jaPassou;
-                const isEspecial = horariosEspeciais.includes(hFormat);
-
+                const hFormat = `${String(Math.floor(totalMin / 60)).padStart(2, '0')}:${String(totalMin % 60).padStart(2, '0')}`;
+                const isOcupado = ocupadosList.includes(hFormat);
                 const btn = document.createElement('div');
-                if (isEspecial && !isOcupado) {
-                    btn.className = 'time-slot time-slot-extra hover:gold-text';
-                    btn.innerHTML = `<span class="block">${hFormat}</span><span class="badge-extra">EXTRA</span>`;
-                    btn.onclick = () => abrirModalExtra(data, hFormat);
-                } else {
-                    btn.className = `time-slot ${isOcupado ? 'occupied' : 'hover:gold-text'}`;
-                    btn.innerText = hFormat;
-                    if (!isOcupado) {
-                        btn.onclick = async () => {
-                            const valido = await validarHorarioNoMomento(dataSelecionada, hFormat);
-                            if(!valido) return;
-                            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('time-selected'));
-                            btn.classList.add('time-selected');
-                            horaSelecionada = hFormat;
-                        };
-                    }
+                btn.className = `time-slot ${isOcupado ? 'occupied' : 'hover:gold-text'}`;
+                btn.innerText = hFormat;
+                if (!isOcupado) {
+                    btn.onclick = () => {
+                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('time-selected'));
+                        btn.classList.add('time-selected');
+                        horaSelecionada = hFormat;
+                    };
                 }
                 slotsDiv.appendChild(btn);
-            });
-            if (window.lucide) lucide.createIcons();
+                totalMin += configPadrao.intervalo;
+            }
         }
 
         async function carregarServicos() {
             const { data } = await _supabase.from('servicos').select('*').order('nome');
-            if(data) document.getElementById('listaServicos').innerHTML = data.map(s => `<label class="flex justify-between items-center p-3 hover:bg-zinc-50 border-b last:border-0 border-zinc-100 cursor-pointer"><div class="flex items-center gap-3"><input type="checkbox" value="${s.nome}" data-price="${s.preco}" onchange="calcTotal()" class="accent-[#D4AF37] w-4 h-4"><span class="font-bold text-zinc-800 uppercase text-[10px] tracking-tighter">${s.nome}</span></div><span class="text-zinc-400 font-bold">R$ ${s.preco.toFixed(2).replace('.', ',')}</span></label>`).join('');
+            if(data) document.getElementById('listaServicos').innerHTML = data.map(s => `<label class="flex justify-between items-center p-3 hover:bg-zinc-50 border-b border-zinc-100 cursor-pointer"><div class="flex items-center gap-3"><input type="checkbox" value="${s.nome}" data-price="${s.preco}" onchange="calcTotal()" class="accent-[#D4AF37] w-4 h-4"><span class="font-bold text-zinc-800 uppercase text-[10px]">${s.nome}</span></div><span class="text-zinc-400 font-bold">R$ ${s.preco.toFixed(2).replace('.', ',')}</span></label>`).join('');
         }
 
         function calcTotal() {
@@ -1090,302 +642,30 @@
         }
 
         async function finalizarAgendamento() {
-            const btn = document.getElementById('btnAgendar');
-            const btnText = document.getElementById('btnText');
-            
-            const n = document.getElementById('nome').value.trim(), z = document.getElementById('whatsapp_input').value; 
-            const anivers = document.getElementById('aniversario_input').value.trim();
+            const n = document.getElementById('nome').value.trim();
+            const z = document.getElementById('whatsapp_input').value;
             const svs = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
             
-            if(!n || z.length < 14 || !dataSelecionada || !horaSelecionada || svs.length === 0) return alert("Preencha todos os campos obrigatórios e escolha um horário! 💅✨");
-            if(anivers.length > 0 && anivers.length < 5) return alert("Por favor, insira o aniversário completo (DD/MM) ou deixe em branco! 🎂");
-            
-            btn.disabled = true;
-            btnText.innerText = "Verificando disponibilidade em tempo real...";
-            
-            const validoFinal = await validarHorarioNoMomento(dataSelecionada, horaSelecionada);
-            if(!validoFinal) {
-                btn.disabled = false;
-                btn.classList.remove('opacity-50');
-                btnText.innerText = "Envie o Comprovante Aqui 💅";
-                return;
-            }
-
-            btn.classList.add('opacity-50');
-            btnText.innerText = "Registrando agendamento...";
+            if(!n || z.length < 14 || !dataSelecionada || !horaSelecionada || svs.length === 0) return alert("Preencha todos os campos obrigatórios!");
 
             const totalStr = document.getElementById('totalDisplay').innerText;
-            const aniversarioSalvar = anivers.length === 5 ? anivers : null;
-
             const { error } = await _supabase.from('agendamentos').insert([{
                 cliente_nome: n.toUpperCase(), 
                 telefone: z, 
-                aniversario: aniversarioSalvar, 
                 data_atendimento: dataSelecionada,
                 horario: horaSelecionada, 
-                servico: svs.join(", "), 
+                servico: svs.join(", ") + " [FIDELIDADE DEZEMBRO]", 
                 status: "Aguardando",
                 valor: parseFloat(totalStr.replace('R$ ', '').replace(',', '.'))
-             }]);
-
-            if(!error) {
-                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\nNome: ${n.toUpperCase()}\nData: ${dataSelecionada.split('-').reverse().join('/')}\nHora: ${horaSelecionada}\nServiços: ${svs.join(", ")}\nTotal: ${totalStr}\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
-                window.location.href = `https://api.whatsapp.com/send?phone=5571992447638&text=${encodeURIComponent(msg)}`;
-            } else { 
-                alert("⚠️ Este horário acabou de ser ocupado por outra cliente! Por favor, selecione outro horário.");
-                btn.disabled = false;
-                btn.classList.remove('opacity-50');
-                btnText.innerText = "Envie o Comprovante Aqui 💅";
-                await carregarHorariosElementoSelecionado();
-            }
-        }
-
-        async function carregarPrecosExtras() {
-            const { data } = await _supabase.from('precos_extras').select('*');
-            precosExtrasMap = {};
-            (data || []).forEach(row => {
-                const key = (row.servico_nome || row.nome || '').toString().toUpperCase().trim();
-                if (key) precosExtrasMap[key] = Number(row.preco || 0);
-            });
-        }
-
-        function abrirModalExtra(data, hora) {
-            extraDataSelecionada = data;
-            extraHoraSelecionada = hora;
-            document.getElementById('extraInfoDataHora').innerText =
-                data.split('-').reverse().join('/') + ' às ' + hora;
-            const n = document.getElementById('nome').value;
-            const z = document.getElementById('whatsapp_input').value;
-            const a = document.getElementById('aniversario_input').value;
-            if (n) document.getElementById('extra_nome').value = n;
-            if (z) document.getElementById('extra_whatsapp').value = z;
-            if (a) document.getElementById('extra_aniversario').value = a;
-            montarListaServicosExtra();
-            document.getElementById('modalExtra').classList.add('open');
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function fecharModalExtra() {
-            document.getElementById('modalExtra').classList.remove('open');
-            extraDataSelecionada = null;
-            extraHoraSelecionada = null;
-        }
-
-        async function montarListaServicosExtra() {
-            const { data } = await _supabase.from('servicos').select('*').order('nome');
-            const box = document.getElementById('extraListaServicos');
-            if (!data || data.length === 0) {
-                box.innerHTML = '<p class="text-center text-zinc-400 py-4">Nenhum serviço</p>';
-                return;
-            }
-            box.innerHTML = data.map(s => {
-                const nome = (s.nome || '').toUpperCase();
-                const precoExtra = precosExtrasMap[nome] != null ? precosExtrasMap[nome] : Number(s.preco || 0);
-                const precoFmt = precoExtra.toFixed(2).replace('.', ',');
-                const temPrecoEspecial = precosExtrasMap[nome] != null;
-                return `<label class="flex justify-between items-center p-3 hover:bg-amber-50 border-b last:border-0 border-amber-100 cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" class="extra-svc accent-[#D4AF37] w-4 h-4" value="${nome}" data-price="${precoExtra}" onchange="calcTotalExtra()">
-                        <span class="font-bold text-zinc-800 uppercase text-[10px] tracking-tighter">${nome}</span>
-                    </div>
-                    <span class="font-bold ${temPrecoEspecial ? 'text-[#D4AF37]' : 'text-zinc-400'}">R$ ${precoFmt}${temPrecoEspecial ? ' ★' : ''}</span>
-                </label>`;
-            }).join('');
-            calcTotalExtra();
-        }
-
-        function calcTotalExtra() {
-            let t = 0;
-            document.querySelectorAll('.extra-svc:checked').forEach(c => t += parseFloat(c.dataset.price));
-            document.getElementById('extraTotalDisplay').innerText = `R$ ${t.toFixed(2).replace('.', ',')}`;
-        }
-
-        async function finalizarAgendamentoExtra() {
-            const btn = document.getElementById('btnExtraConfirmar');
-            const btnText = document.getElementById('btnExtraText');
-            const n = document.getElementById('extra_nome').value.trim();
-            const z = document.getElementById('extra_whatsapp').value;
-            const anivers = document.getElementById('extra_aniversario').value.trim();
-            const svs = Array.from(document.querySelectorAll('.extra-svc:checked')).map(c => c.value);
-
-            if (!n || z.length < 14 || !extraDataSelecionada || !extraHoraSelecionada || svs.length === 0) {
-                return alert("Preencha nome, WhatsApp, escolha o horário extra e pelo menos um serviço! 💅✨");
-            }
-            if (anivers.length > 0 && anivers.length < 5) {
-                return alert("Aniversário completo (DD/MM) ou deixe em branco! 🎂");
-            }
-
-            btn.disabled = true;
-            btnText.innerText = "Verificando...";
-
-            const valido = await validarHorarioNoMomento(extraDataSelecionada, extraHoraSelecionada);
-            if (!valido) {
-                btn.disabled = false;
-                btnText.innerText = "Confirmar horário extra 💅";
-                return;
-            }
-
-            btnText.innerText = "Registrando...";
-            const totalStr = document.getElementById('extraTotalDisplay').innerText;
-            const aniversarioSalvar = anivers.length === 5 ? anivers : null;
-
-            const { error } = await _supabase.from('agendamentos').insert([{
-                cliente_nome: n.toUpperCase(),
-                telefone: z,
-                aniversario: aniversarioSalvar,
-                data_atendimento: extraDataSelecionada,
-                horario: extraHoraSelecionada,
-                servico: svs.join(", ") + " [HORÁRIO EXTRA]",
-                status: "Aguardando",
-                valor: parseFloat(totalStr.replace('R$ ', '').replace('.', '').replace(',', '.')) || 0
             }]);
 
-            if (!error) {
-                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\n*HORÁRIO EXTRA*\n\nNome: ${n.toUpperCase()}\nData: ${extraDataSelecionada.split('-').reverse().join('/')}\nHora: ${extraHoraSelecionada} *(HORÁRIO EXTRA)*\nServiços: ${svs.join(", ")}\nTotal: ${totalStr}\n\n*Estou ciente da atualização dos valores por ter selecionado um horário extra.*\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
+            if(!error) {
+                const msg = `Agendamento Fidelidade Dezembro 💅✨\nNome: ${n.toUpperCase()}\nData: ${dataSelecionada.split('-').reverse().join('/')}\nHora: ${horaSelecionada}\nTotal: ${totalStr}`;
                 window.location.href = `https://api.whatsapp.com/send?phone=5571992447638&text=${encodeURIComponent(msg)}`;
             } else {
-                alert("⚠️ Este horário acabou de ser ocupado. Escolha outro.");
-                btn.disabled = false;
-                btnText.innerText = "Confirmar horário extra 💅";
-                fecharModalExtra();
-                await carregarHorariosElementoSelecionado();
+                alert("Erro ao gravar agendamento.");
             }
         }
-
-        // ========== TUTORIAL ==========
-        const TOUR_KEY = 'rivi_tour_visto_v1';
-        const tourSteps = [
-            {
-                id: null,
-                title: 'Bem-vinda ao agendamento exclusivo ✨',
-                text: 'Esta página é reservada para clientes selecionadas. Em poucos passos você agenda seu horário com prioridade e cuidado especial.',
-                btn: 'Começar'
-            },
-            {
-                id: 'tourStepDados',
-                title: '1. Seus dados',
-                text: 'Preencha seu nome completo e WhatsApp (obrigatórios). O aniversário é opcional e pode gerar descontos no seu mês.',
-                btn: 'Próximo'
-            },
-            {
-                id: 'tourStepServicos',
-                title: '2. Escolha os serviços',
-                text: 'Marque um ou mais procedimentos. O valor total aparece logo abaixo. Depois você ainda pode mudar se quiser.',
-                btn: 'Próximo'
-            },
-            {
-                id: 'tourStepData',
-                title: '3. Escolha o dia',
-                text: 'Toque em um dia verde no calendário. Dias em vermelho estão indisponíveis. Use as setas para mudar o mês.',
-                btn: 'Próximo'
-            },
-            {
-                id: 'section-horarios',
-                title: '4. Escolha o horário',
-                text: 'Depois de escolher o dia, aparecem os horários livres. Horários com selo EXTRA são especiais: ao tocar, abre um aviso com valores atualizados.',
-                btn: 'Próximo'
-            },
-            {
-                id: 'tourStepConfirmar',
-                title: '5. Confirmar e enviar sinal',
-                text: 'Envie o sinal de R$ 50,00 no PIX e toque no botão verde para mandar o comprovante no WhatsApp. Pronto!',
-                btn: 'Entendi!'
-            }
-        ];
-        let tourIndex = 0;
-        let tourAtivo = false;
-
-        function limparHighlights() {
-            document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
-        }
-
-        function scrollTourTarget(el) {
-            if (!el) return;
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        function renderTourDots() {
-            const dots = document.getElementById('tourDots');
-            if (!dots) return;
-            dots.innerHTML = tourSteps.map((_, i) =>
-                `<span style="width:8px;height:8px;border-radius:999px;display:inline-block;background:${i === tourIndex ? '#D4AF37' : '#e5e7eb'}"></span>`
-            ).join('');
-        }
-
-        function mostrarTourStep() {
-            const step = tourSteps[tourIndex];
-            if (!step) return pularTour();
-
-            limparHighlights();
-            const overlay = document.getElementById('tourOverlay');
-            const card = document.getElementById('tourCard');
-            overlay.classList.add('open');
-            card.classList.add('open');
-            document.getElementById('tourFab').classList.add('hidden');
-
-            document.getElementById('tourStepLabel').innerText =
-                tourIndex === 0 ? 'Tutorial ✨' : `Passo ${tourIndex} de ${tourSteps.length - 1}`;
-            document.getElementById('tourTitle').innerText = step.title;
-            document.getElementById('tourText').innerText = step.text;
-            document.getElementById('tourBtnProx').innerText = step.btn;
-
-            const btnVoltar = document.getElementById('tourBtnVoltar');
-            if (tourIndex > 0) btnVoltar.classList.remove('hidden');
-            else btnVoltar.classList.add('hidden');
-
-            renderTourDots();
-
-            if (step.id) {
-                const el = document.getElementById(step.id);
-                if (el) {
-                    el.classList.add('tour-highlight');
-                    setTimeout(() => scrollTourTarget(el), 120);
-                }
-            }
-        }
-
-        function iniciarTour(forcar) {
-            if (!forcar && localStorage.getItem(TOUR_KEY) === '1') {
-                document.getElementById('tourFab').classList.remove('hidden');
-                return;
-            }
-            tourAtivo = true;
-            tourIndex = 0;
-            mostrarTourStep();
-        }
-
-        function pularTour() {
-            tourAtivo = false;
-            limparHighlights();
-            document.getElementById('tourOverlay').classList.remove('open');
-            document.getElementById('tourCard').classList.remove('open');
-            localStorage.setItem(TOUR_KEY, '1');
-            document.getElementById('tourFab').classList.remove('hidden');
-        }
-
-        function tourProximo() {
-            if (tourIndex >= tourSteps.length - 1) {
-                pularTour();
-                return;
-            }
-            tourIndex += 1;
-            mostrarTourStep();
-        }
-
-        function tourVoltar() {
-            if (tourIndex <= 0) return;
-            tourIndex -= 1;
-            mostrarTourStep();
-        }
-
-        document.getElementById('tourOverlay').addEventListener('click', pularTour);
-
-        const _origInit = init;
-        init = async function() {
-            await carregarPrecosExtras();
-            await _origInit();
-            setTimeout(() => iniciarTour(false), 600);
-        };
 
         init();
     </script>
