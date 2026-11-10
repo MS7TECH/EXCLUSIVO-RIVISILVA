@@ -608,7 +608,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-zinc-900">Você selecionou um horário extra</h3>
                     <p class="text-xs text-zinc-500 leading-relaxed px-2">
-                        Este horário está <strong>fora do expediente padrão</strong>. Os valores dos serviços são diferentes. Ao continuar, você declara estar ciente da atualização de preços.
+                        Este horário está <strong>fora do expediente padrão</strong>. Os valores dos serviços são diferentes. Ao continuar, você declara estar ciente da atualização de preços e de que o valor <strong>não inclui desenhos na unha</strong>.
                     </p>
                     <p class="text-sm font-bold text-[#D4AF37]" id="extraInfoDataHora">--</p>
                 </div>
@@ -1324,7 +1324,7 @@
                     console.warn("Espelho no portal (agendamentos) falhou, mas o agendamento Natal foi salvo:", e);
                 }
 
-                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\n*HORÁRIO EXTRA*\n\nNome: ${n.toUpperCase()}\nData: ${extraDataSelecionada.split('-').reverse().join('/')}\nHora: ${extraHoraSelecionada} *(HORÁRIO EXTRA)*\nServiços: ${svs.join(", ")}\nTotal: ${totalStr}\n\nCliente Fidelidade\n\n*Estou ciente da atualização dos valores por ter selecionado um horário extra.*\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
+                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\n*HORÁRIO EXTRA*\n\nNome: ${n.toUpperCase()}\nData: ${extraDataSelecionada.split('-').reverse().join('/')}\nHora: ${extraHoraSelecionada} *(HORÁRIO EXTRA)*\nServiços: ${svs.join(", ")}\nTotal: ${totalStr}\n\nCliente Fidelidade\n\n*Estou ciente da atualização dos valores por ter selecionado um horário extra.*\n*Também estou ciente de que o valor não inclui desenhos na unha.*\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
                 window.location.href = `https://api.whatsapp.com/send?phone=5571992447638&text=${encodeURIComponent(msg)}`;
             } else {
                 alert("⚠️ Este horário acabou de ser ocupado. Escolha outro.");
