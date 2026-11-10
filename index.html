@@ -796,14 +796,20 @@
                 }
             }
 
-            const { data: configDB } = await _supabase.from('agenda_config_natal').select('*').eq('id', 1).maybeSingle();
-            const { data: exDB } = await _supabase.from('agenda_excecoes_natal').select('*').eq('data', dataS).maybeSingle();
-            const { data: extrasDB } = await _supabase.from('horarios_extras_natal').select('horario').eq('data', dataS);
+            const [resConfigDB, resExAll, resExtrasAll, resEspAll] = await Promise.all([
+                _supabase.from('agenda_config_natal').select('*').eq('id', 1).maybeSingle(),
+                _supabase.from('agenda_excecoes_natal').select('*'),
+                _supabase.from('horarios_extras_natal').select('horario, data'),
+                _supabase.from('horarios_especiais_natal').select('horario, data')
+            ]);
+            const configDB = resConfigDB.data;
+            const exDB = (resExAll.data || []).find(x => toDateKey(x.data) === toDateKey(dataS));
 
             const hI = String(exDB?.hora_inicio || configDB?.hora_inicio || configPadrao.inicio).slice(0, 5);
             const hF = String(exDB?.hora_fim || configDB?.hora_fim || configPadrao.fim).slice(0, 5);
             const intervalo = Number(exDB?.intervalo_minutos) || Number(configDB?.intervalo_minutos) || Number(configPadrao.intervalo) || 40;
             const horaSNorm = String(horaS).slice(0, 5);
+            const step = Math.max(5, Number(intervalo) || 40);
 
             let horariosReaisPermitidos = [];
             let [h, m] = hI.split(':').map(Number);
@@ -813,15 +819,14 @@
 
             while (totalMin < totalFim) {
                 horariosReaisPermitidos.push(`${String(Math.floor(totalMin / 60)).padStart(2, '0')}:${String(totalMin % 60).padStart(2, '0')}`);
-                totalMin += intervalo;
+                totalMin += step;
             }
 
-            const extrasList = (extrasDB || []).map(e => String(e.horario).substring(0, 5));
-            extrasList.forEach(ex => {
+            (resExtrasAll.data || []).filter(e => toDateKey(e.data) === toDateKey(dataS)).forEach(e => {
+                const ex = String(e.horario).substring(0, 5);
                 if (!horariosReaisPermitidos.includes(ex)) horariosReaisPermitidos.push(ex);
             });
-            const { data: especiaisDB } = await _supabase.from('horarios_especiais_natal').select('horario').eq('data', dataS);
-            (especiaisDB || []).forEach(e => {
+            (resEspAll.data || []).filter(e => toDateKey(e.data) === toDateKey(dataS)).forEach(e => {
                 const hx = String(e.horario).substring(0, 5);
                 if (!horariosReaisPermitidos.includes(hx)) horariosReaisPermitidos.push(hx);
             });
@@ -1035,43 +1040,72 @@
             dataSelecionada = data; horaSelecionada = null;
             document.getElementById('section-horarios').classList.remove('hidden');
             document.getElementById('display-date').innerText = data.split('-').reverse().join('/');
-            
-            const { data: ocupados } = await _supabase.from('agendamentos_natal').select('horario').eq('data_atendimento', data).not('status', 'eq', 'Cancelado');
-            const ocupadosList = ocupados?.map(o => o.horario.substring(0, 5)) || [];
 
-            const { data: inativadosData } = await _supabase.from('horarios_bloqueados_pontuais_natal').select('horario').eq('data', data);
-            const horariosInativados = (inativadosData || []).map(i => i.horario.substring(0, 5));
+            // Recarrega config padrão + tudo do dia (filtro client-side evita falha de match de data)
+            const [resCfg, resOcup, resInat, resExtras, resEsp, resExList] = await Promise.all([
+                _supabase.from('agenda_config_natal').select('*').eq('id', 1).maybeSingle(),
+                _supabase.from('agendamentos_natal').select('horario, data_atendimento, status'),
+                _supabase.from('horarios_bloqueados_pontuais_natal').select('horario, data'),
+                _supabase.from('horarios_extras_natal').select('horario, data'),
+                _supabase.from('horarios_especiais_natal').select('horario, data'),
+                _supabase.from('agenda_excecoes_natal').select('*')
+            ]);
 
-            const { data: extrasData } = await _supabase.from('horarios_extras_natal').select('horario').eq('data', data);
-            const horariosExtras = (extrasData || []).map(e => e.horario.substring(0, 5));
+            if (resCfg.data) {
+                configPadrao = {
+                    inicio: String(resCfg.data.hora_inicio || '09:00').slice(0, 5),
+                    fim: String(resCfg.data.hora_fim || '18:00').slice(0, 5),
+                    intervalo: Number(resCfg.data.intervalo_minutos) || 40
+                };
+            }
 
-            const { data: especiaisData } = await _supabase.from('horarios_especiais_natal').select('horario').eq('data', data);
-            const horariosEspeciais = (especiaisData || []).map(e => String(e.horario).substring(0, 5));
+            const ocupadosList = (resOcup.data || [])
+                .filter(o => toDateKey(o.data_atendimento) === data && o.status !== 'Cancelado')
+                .map(o => String(o.horario).substring(0, 5));
+
+            const horariosInativados = (resInat.data || [])
+                .filter(i => toDateKey(i.data) === data)
+                .map(i => String(i.horario).substring(0, 5));
+
+            const horariosExtras = (resExtras.data || [])
+                .filter(e => toDateKey(e.data) === data)
+                .map(e => String(e.horario).substring(0, 5));
+
+            const horariosEspeciais = (resEsp.data || [])
+                .filter(e => toDateKey(e.data) === data)
+                .map(e => String(e.horario).substring(0, 5));
             horariosEspeciaisDoDia = [...horariosEspeciais];
 
-            const { data: exDiaFresh } = await _supabase.from('agenda_excecoes_natal').select('*').eq('data', data).maybeSingle();
+            const exDiaFresh = (resExList.data || []).find(x => toDateKey(x.data) === data);
             if (exDiaFresh && exDiaFresh.hora_inicio && exDiaFresh.hora_fim) {
                 excecoes[data] = {
                     inicio: String(exDiaFresh.hora_inicio).slice(0, 5),
                     fim: String(exDiaFresh.hora_fim).slice(0, 5),
                     intervalo: Number(exDiaFresh.intervalo_minutos) || null
                 };
+            } else {
+                // garante que não fica config antiga de outro dia no mesmo key
+                delete excecoes[data];
             }
 
             const hI = String(excecoes[data]?.inicio || configPadrao.inicio).slice(0, 5);
             const hF = String(excecoes[data]?.fim || configPadrao.fim).slice(0, 5);
             const intervaloDia = Number(excecoes[data]?.intervalo) || Number(configPadrao.intervalo) || 40;
             const slotsDiv = document.getElementById('time-slots'); slotsDiv.innerHTML = '';
-            
+
             let [h, m] = hI.split(':').map(Number);
             let totalMin = (h * 60) + m;
             const [hFimLimit, mFimLimit] = hF.split(':').map(Number);
             const totalFim = (hFimLimit * 60) + mFimLimit;
 
             let horariosPermitidos = [];
-            while (totalMin < totalFim) {
-                horariosPermitidos.push(`${String(Math.floor(totalMin / 60)).padStart(2, '0')}:${String(totalMin % 60).padStart(2, '0')}`);
-                totalMin += intervaloDia;
+            // proteção contra intervalo inválido
+            const step = Math.max(5, Number(intervaloDia) || 40);
+            if (totalMin < totalFim) {
+                while (totalMin < totalFim) {
+                    horariosPermitidos.push(`${String(Math.floor(totalMin / 60)).padStart(2, '0')}:${String(totalMin % 60).padStart(2, '0')}`);
+                    totalMin += step;
+                }
             }
 
             horariosExtras.forEach(extra => {
@@ -1081,7 +1115,7 @@
                 if (!horariosPermitidos.includes(extra)) horariosPermitidos.push(extra);
             });
 
-            horariosPermitidos = horariosPermitidos.filter(h => !horariosInativados.includes(h));
+            horariosPermitidos = horariosPermitidos.filter(hx => !horariosInativados.includes(hx));
             horariosPermitidos.sort();
 
             const agora = new Date();
@@ -1192,7 +1226,7 @@
                     console.warn("Espelho no portal (agendamentos) falhou, mas o agendamento Natal foi salvo:", e);
                 }
 
-                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\nNome: ${n.toUpperCase()}\nData: ${dataSelecionada.split('-').reverse().join('/')}\nHora: ${horaSelecionada}\nServiços: ${servicosStr}\nTotal: ${totalStr}\n\nCliente Fidelidade\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
+                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\nNome: ${n.toUpperCase()}\nData: ${dataSelecionada.split('-').reverse().join('/')}\nHora: ${horaSelecionada}\nServiços: ${servicosStr}\nTotal: ${totalStr}\n\nCliente Fidelidade\n\n*Estou ciente de que o valor fechado não inclui desenhos na unha.*\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
                 window.location.href = `https://api.whatsapp.com/send?phone=5571992447638&text=${encodeURIComponent(msg)}`;
             } else { 
                 alert("⚠️ Este horário acabou de ser ocupado por outra cliente! Por favor, selecione outro horário.");
