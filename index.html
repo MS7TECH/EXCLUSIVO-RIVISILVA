@@ -905,6 +905,11 @@
             await atualizarCalendario();
         }
 
+        function toDateKey(v) {
+            if (!v) return "";
+            return String(v).slice(0, 10);
+        }
+
         async function atualizarCalendario() {
             const container = document.getElementById('calendarDays');
             const labelMes = document.getElementById('mesAnoAtual');
@@ -913,11 +918,12 @@
             const ano = mesVisualizado.getFullYear();
             const mes = String(mesVisualizado.getMonth() + 1).padStart(2, '0');
             const mesAnoKey = `${ano}-${mes}`;
-            const [resConfig, resBloqueios, resExcecoes, resMeses] = await Promise.all([
+            const [resConfig, resBloqueios, resExcecoes, resMeses, resMesesAll] = await Promise.all([
                 _supabase.from('agenda_config_natal').select('*').eq('id', 1).maybeSingle(),
                 _supabase.from('agenda_bloqueada_natal').select('data_interditada'),
                 _supabase.from('agenda_excecoes_natal').select('*'),
-                _supabase.from('meses_liberados_natal').select('liberado').eq('mes_ano', mesAnoKey).maybeSingle()
+                _supabase.from('meses_liberados_natal').select('liberado').eq('mes_ano', mesAnoKey).maybeSingle(),
+                _supabase.from('meses_liberados_natal').select('mes_ano, liberado').eq('liberado', true).order('mes_ano')
             ]);
             if (resConfig.data) {
                 configPadrao = {
@@ -926,21 +932,37 @@
                     intervalo: Number(resConfig.data.intervalo_minutos) || 40
                 };
             }
-            bloqueios = resBloqueios.data ? resBloqueios.data.map(b => b.data_interditada) : [];
+            bloqueios = (resBloqueios.data || []).map(b => toDateKey(b.data_interditada)).filter(Boolean);
             excecoes = {};
             if (resExcecoes.data) {
                 resExcecoes.data.forEach(ex => {
-                    if (!ex.data || !ex.hora_inicio || !ex.hora_fim) return;
-                    excecoes[ex.data] = {
+                    const dk = toDateKey(ex.data);
+                    if (!dk || !ex.hora_inicio || !ex.hora_fim) return;
+                    excecoes[dk] = {
                         inicio: String(ex.hora_inicio).slice(0, 5),
                         fim: String(ex.hora_fim).slice(0, 5),
                         intervalo: Number(ex.intervalo_minutos) || null
                     };
                 });
             }
-            if (resMeses.data?.liberado !== true) {
-                container.innerHTML = `<div class="col-span-7 flex flex-col items-center py-10 opacity-60"><i data-lucide="lock" class="w-8 h-8 mb-2 gold-text"></i><p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest text-center">Agenda fechada para este mês.</p></div>`;
-            } else { 
+
+            const mesLiberado = resMeses.data?.liberado === true;
+            // Se o mês atual da tela não está liberado, tenta pular para o primeiro mês aberto
+            if (!mesLiberado) {
+                const abertos = (resMesesAll.data || []).map(m => m.mes_ano).filter(Boolean);
+                if (abertos.length) {
+                    const [y, m] = abertos[0].split('-').map(Number);
+                    const alvo = new Date(y, m - 1, 1);
+                    const mesmo =
+                        alvo.getFullYear() === mesVisualizado.getFullYear() &&
+                        alvo.getMonth() === mesVisualizado.getMonth();
+                    if (!mesmo) {
+                        mesVisualizado = alvo;
+                        return atualizarCalendario();
+                    }
+                }
+                container.innerHTML = `<div class="col-span-7 flex flex-col items-center py-10 opacity-60"><i data-lucide="lock" class="w-8 h-8 mb-2 gold-text"></i><p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest text-center">Agenda fechada para este mês.<br/>Libere o mês no painel (Agendamento Natal).</p></div>`;
+            } else {
                 renderCalendar(mesVisualizado);
             }
             if (window.lucide) lucide.createIcons();
@@ -956,10 +978,11 @@
             for(let d=1; d<=ultimoDia; d++) {
                 const dataStr = `${dataBase.getFullYear()}-${String(dataBase.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                 const dataLoop = new Date(dataBase.getFullYear(), dataBase.getMonth(), d);
+                dataLoop.setHours(0,0,0,0);
                 const isBlocked = bloqueios.includes(dataStr);
                 const isPassado = dataLoop < hoje;
                 const box = document.createElement('div');
-                box.className = `day-box ${isPassado || isBlocked ? 'day-busy' : 'day-free'} ${excecoes[dataStr] && !isBlocked ? 'day-special' : ''}`;
+                box.className = `day-box ${isPassado || isBlocked ? 'day-busy' : 'day-free'} ${excecoes[dataStr] && !isBlocked && !isPassado ? 'day-special' : ''}`;
                 box.innerText = d;
                 if(!isPassado && !isBlocked) { box.onclick = () => carregarHorarios(box, dataStr); }
                 container.appendChild(box);
@@ -1056,7 +1079,7 @@
         }
 
         async function carregarServicos() {
-            const { data } = await _supabase.from('servicos_natal').select('*').order('nome');
+            const { data } = await _supabase.from('servicos').select('*').order('nome');
             if(data) document.getElementById('listaServicos').innerHTML = data.map(s => `<label class="flex justify-between items-center p-3 hover:bg-zinc-50 border-b last:border-0 border-zinc-100 cursor-pointer"><div class="flex items-center gap-3"><input type="checkbox" value="${s.nome}" data-price="${s.preco}" onchange="calcTotal()" class="accent-[#D4AF37] w-4 h-4"><span class="font-bold text-zinc-800 uppercase text-[10px] tracking-tighter">${s.nome}</span></div><span class="text-zinc-400 font-bold">R$ ${s.preco.toFixed(2).replace('.', ',')}</span></label>`).join('');
         }
 
@@ -1172,7 +1195,7 @@
         }
 
         async function montarListaServicosExtra() {
-            const { data } = await _supabase.from('servicos_natal').select('*').order('nome');
+            const { data } = await _supabase.from('servicos').select('*').order('nome');
             const box = document.getElementById('extraListaServicos');
             if (!data || data.length === 0) {
                 box.innerHTML = '<p class="text-center text-zinc-400 py-4">Nenhum serviço</p>';
