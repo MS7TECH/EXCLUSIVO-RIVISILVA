@@ -902,7 +902,8 @@
         async function mudarMes(direcao) {
             mesVisualizado.setMonth(mesVisualizado.getMonth() + direcao);
             document.getElementById('section-horarios').classList.add('hidden');
-            await atualizarCalendario();
+            // Não força auto-jump ao navegar manualmente pelas setas
+            await atualizarCalendario({ skipAutoJump: true });
         }
 
         function toDateKey(v) {
@@ -910,7 +911,28 @@
             return String(v).slice(0, 10);
         }
 
-        async function atualizarCalendario() {
+        function mesAnoDeDate(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        // Retorna o melhor mês liberado: atual se aberto, senão o próximo futuro
+        function escolherMesLiberado(abertos) {
+            if (!abertos || !abertos.length) return null;
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const atualKey = mesAnoDeDate(hoje);
+            const ordenados = [...abertos].sort();
+            // 1) mês atual liberado
+            if (ordenados.includes(atualKey)) return atualKey;
+            // 2) primeiro mês liberado >= mês atual
+            const futuros = ordenados.filter(k => k >= atualKey);
+            if (futuros.length) return futuros[0];
+            // 3) fallback: último liberado (mesmo que passado)
+            return ordenados[ordenados.length - 1];
+        }
+
+        async function atualizarCalendario(opts) {
+            const skipAutoJump = opts && opts.skipAutoJump;
             const container = document.getElementById('calendarDays');
             const labelMes = document.getElementById('mesAnoAtual');
             const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -946,22 +968,30 @@
                 });
             }
 
+            const abertos = (resMesesAll.data || []).map(m => m.mes_ano).filter(Boolean);
             const mesLiberado = resMeses.data?.liberado === true;
-            // Se o mês atual da tela não está liberado, tenta pular para o primeiro mês aberto
-            if (!mesLiberado) {
-                const abertos = (resMesesAll.data || []).map(m => m.mes_ano).filter(Boolean);
-                if (abertos.length) {
-                    const [y, m] = abertos[0].split('-').map(Number);
-                    const alvo = new Date(y, m - 1, 1);
-                    const mesmo =
-                        alvo.getFullYear() === mesVisualizado.getFullYear() &&
-                        alvo.getMonth() === mesVisualizado.getMonth();
-                    if (!mesmo) {
-                        mesVisualizado = alvo;
-                        return atualizarCalendario();
+            const hoje = new Date(); hoje.setHours(0,0,0,0);
+            const ultimoDiaMes = new Date(ano, mesVisualizado.getMonth() + 1, 0);
+            ultimoDiaMes.setHours(0,0,0,0);
+            const mesInteiroPassado = ultimoDiaMes < hoje;
+
+            // Auto-navega para mês liberado com datas futuras
+            if (!skipAutoJump) {
+                const precisaTrocar = !mesLiberado || mesInteiroPassado;
+                if (precisaTrocar) {
+                    const melhor = escolherMesLiberado(abertos);
+                    if (melhor && melhor !== mesAnoKey) {
+                        const [y, m] = melhor.split('-').map(Number);
+                        mesVisualizado = new Date(y, m - 1, 1);
+                        return atualizarCalendario({ skipAutoJump: true });
                     }
                 }
+            }
+
+            if (!mesLiberado) {
                 container.innerHTML = `<div class="col-span-7 flex flex-col items-center py-10 opacity-60"><i data-lucide="lock" class="w-8 h-8 mb-2 gold-text"></i><p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest text-center">Agenda fechada para este mês.<br/>Libere o mês no painel (Agendamento Natal).</p></div>`;
+            } else if (mesInteiroPassado) {
+                container.innerHTML = `<div class="col-span-7 flex flex-col items-center py-10 opacity-60"><i data-lucide="calendar-off" class="w-8 h-8 mb-2 gold-text"></i><p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest text-center">Este mês já passou.<br/>Use as setas para ir a um mês futuro liberado (ex: Dezembro 2026).</p></div>`;
             } else {
                 renderCalendar(mesVisualizado);
             }
@@ -974,8 +1004,9 @@
             const ultimoDia = new Date(dataBase.getFullYear(), dataBase.getMonth() + 1, 0).getDate();
             const hoje = new Date(); hoje.setHours(0,0,0,0);
             container.innerHTML = '';
-            for(let i=0; i<primeiroDia; i++) container.innerHTML += '<div></div>';
-            for(let d=1; d<=ultimoDia; d++) {
+            let livres = 0;
+            for (let i = 0; i < primeiroDia; i++) container.innerHTML += '<div></div>';
+            for (let d = 1; d <= ultimoDia; d++) {
                 const dataStr = `${dataBase.getFullYear()}-${String(dataBase.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                 const dataLoop = new Date(dataBase.getFullYear(), dataBase.getMonth(), d);
                 dataLoop.setHours(0,0,0,0);
@@ -984,8 +1015,17 @@
                 const box = document.createElement('div');
                 box.className = `day-box ${isPassado || isBlocked ? 'day-busy' : 'day-free'} ${excecoes[dataStr] && !isBlocked && !isPassado ? 'day-special' : ''}`;
                 box.innerText = d;
-                if(!isPassado && !isBlocked) { box.onclick = () => carregarHorarios(box, dataStr); }
+                if (!isPassado && !isBlocked) {
+                    livres++;
+                    box.onclick = () => carregarHorarios(box, dataStr);
+                }
                 container.appendChild(box);
+            }
+            if (livres === 0) {
+                const aviso = document.createElement('div');
+                aviso.className = 'col-span-7 text-center text-[10px] font-bold text-zinc-400 uppercase tracking-widest py-4';
+                aviso.innerText = 'Nenhuma data disponível neste mês (todas no passado ou bloqueadas no painel).';
+                container.appendChild(aviso);
             }
         }
 
