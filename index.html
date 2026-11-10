@@ -796,9 +796,9 @@
                 }
             }
 
-            const { data: configDB } = await _supabase.from('agenda_config').select('*').eq('id', 1).maybeSingle();
-            const { data: exDB } = await _supabase.from('agenda_excecoes').select('*').eq('data', dataS).maybeSingle();
-            const { data: extrasDB } = await _supabase.from('horarios_extras').select('horario').eq('data', dataS);
+            const { data: configDB } = await _supabase.from('agenda_config_natal').select('*').eq('id', 1).maybeSingle();
+            const { data: exDB } = await _supabase.from('agenda_excecoes_natal').select('*').eq('data', dataS).maybeSingle();
+            const { data: extrasDB } = await _supabase.from('horarios_extras_natal').select('horario').eq('data', dataS);
 
             const hI = String(exDB?.hora_inicio || configDB?.hora_inicio || configPadrao.inicio).slice(0, 5);
             const hF = String(exDB?.hora_fim || configDB?.hora_fim || configPadrao.fim).slice(0, 5);
@@ -820,7 +820,7 @@
             extrasList.forEach(ex => {
                 if (!horariosReaisPermitidos.includes(ex)) horariosReaisPermitidos.push(ex);
             });
-            const { data: especiaisDB } = await _supabase.from('horarios_especiais').select('horario').eq('data', dataS);
+            const { data: especiaisDB } = await _supabase.from('horarios_especiais_natal').select('horario').eq('data', dataS);
             (especiaisDB || []).forEach(e => {
                 const hx = String(e.horario).substring(0, 5);
                 if (!horariosReaisPermitidos.includes(hx)) horariosReaisPermitidos.push(hx);
@@ -832,7 +832,7 @@
                 return false;
             }
 
-            const { data: ocupadoCheck } = await _supabase.from('agendamentos')
+            const { data: ocupadoCheck } = await _supabase.from('agendamentos_natal')
                 .select('id, horario')
                 .eq('data_atendimento', dataS)
                 .not('status', 'eq', 'Cancelado');
@@ -845,7 +845,7 @@
                 return false;
             }
 
-            const { data: bloqueioPontualCheck } = await _supabase.from('horarios_bloqueados_pontuais')
+            const { data: bloqueioPontualCheck } = await _supabase.from('horarios_bloqueados_pontuais_natal')
                 .select('id, horario')
                 .eq('data', dataS);
 
@@ -874,11 +874,11 @@
             await atualizarCalendario();
             if (window.lucide) lucide.createIcons();
             
-            _supabase.channel('public:agendamentos_e_bloqueios')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'agendamentos' }, () => {
+            _supabase.channel('public:agendamentos_natal_e_bloqueios')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'agendamentos_natal' }, () => {
                     if (dataSelecionada) carregarHorariosElementoSelecionado();
                 })
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'horarios_bloqueados_pontuais' }, () => {
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'horarios_bloqueados_pontuais_natal' }, () => {
                     if (dataSelecionada) carregarHorariosElementoSelecionado();
                 })
                 .subscribe();
@@ -914,10 +914,10 @@
             const mes = String(mesVisualizado.getMonth() + 1).padStart(2, '0');
             const mesAnoKey = `${ano}-${mes}`;
             const [resConfig, resBloqueios, resExcecoes, resMeses] = await Promise.all([
-                _supabase.from('agenda_config').select('*').eq('id', 1).maybeSingle(),
-                _supabase.from('agenda_bloqueada').select('data_interditada'),
-                _supabase.from('agenda_excecoes').select('*'),
-                _supabase.from('meses_liberados').select('liberado').eq('mes_ano', mesAnoKey).maybeSingle()
+                _supabase.from('agenda_config_natal').select('*').eq('id', 1).maybeSingle(),
+                _supabase.from('agenda_bloqueada_natal').select('data_interditada'),
+                _supabase.from('agenda_excecoes_natal').select('*'),
+                _supabase.from('meses_liberados_natal').select('liberado').eq('mes_ano', mesAnoKey).maybeSingle()
             ]);
             if (resConfig.data) {
                 configPadrao = {
@@ -973,20 +973,20 @@
             document.getElementById('section-horarios').classList.remove('hidden');
             document.getElementById('display-date').innerText = data.split('-').reverse().join('/');
             
-            const { data: ocupados } = await _supabase.from('agendamentos').select('horario').eq('data_atendimento', data).not('status', 'eq', 'Cancelado');
+            const { data: ocupados } = await _supabase.from('agendamentos_natal').select('horario').eq('data_atendimento', data).not('status', 'eq', 'Cancelado');
             const ocupadosList = ocupados?.map(o => o.horario.substring(0, 5)) || [];
 
-            const { data: inativadosData } = await _supabase.from('horarios_bloqueados_pontuais').select('horario').eq('data', data);
+            const { data: inativadosData } = await _supabase.from('horarios_bloqueados_pontuais_natal').select('horario').eq('data', data);
             const horariosInativados = (inativadosData || []).map(i => i.horario.substring(0, 5));
 
-            const { data: extrasData } = await _supabase.from('horarios_extras').select('horario').eq('data', data);
+            const { data: extrasData } = await _supabase.from('horarios_extras_natal').select('horario').eq('data', data);
             const horariosExtras = (extrasData || []).map(e => e.horario.substring(0, 5));
 
-            const { data: especiaisData } = await _supabase.from('horarios_especiais').select('horario').eq('data', data);
+            const { data: especiaisData } = await _supabase.from('horarios_especiais_natal').select('horario').eq('data', data);
             const horariosEspeciais = (especiaisData || []).map(e => String(e.horario).substring(0, 5));
             horariosEspeciaisDoDia = [...horariosEspeciais];
 
-            const { data: exDiaFresh } = await _supabase.from('agenda_excecoes').select('*').eq('data', data).maybeSingle();
+            const { data: exDiaFresh } = await _supabase.from('agenda_excecoes_natal').select('*').eq('data', data).maybeSingle();
             if (exDiaFresh && exDiaFresh.hora_inicio && exDiaFresh.hora_fim) {
                 excecoes[data] = {
                     inicio: String(exDiaFresh.hora_inicio).slice(0, 5),
@@ -1056,7 +1056,7 @@
         }
 
         async function carregarServicos() {
-            const { data } = await _supabase.from('servicos').select('*').order('nome');
+            const { data } = await _supabase.from('servicos_natal').select('*').order('nome');
             if(data) document.getElementById('listaServicos').innerHTML = data.map(s => `<label class="flex justify-between items-center p-3 hover:bg-zinc-50 border-b last:border-0 border-zinc-100 cursor-pointer"><div class="flex items-center gap-3"><input type="checkbox" value="${s.nome}" data-price="${s.preco}" onchange="calcTotal()" class="accent-[#D4AF37] w-4 h-4"><span class="font-bold text-zinc-800 uppercase text-[10px] tracking-tighter">${s.nome}</span></div><span class="text-zinc-400 font-bold">R$ ${s.preco.toFixed(2).replace('.', ',')}</span></label>`).join('');
         }
 
@@ -1093,20 +1093,43 @@
 
             const totalStr = document.getElementById('totalDisplay').innerText;
             const aniversarioSalvar = anivers.length === 5 ? anivers : null;
+            const valorNum = parseFloat(totalStr.replace('R$ ', '').replace(',', '.')) || 0;
+            const servicosStr = svs.join(", ");
 
-            const { error } = await _supabase.from('agendamentos').insert([{
-                cliente_nome: n.toUpperCase(), 
-                telefone: z, 
-                aniversario: aniversarioSalvar, 
+            // 1) Fonte oficial da campanha (tabelas novas)
+            const { error } = await _supabase.from('agendamentos_natal').insert([{
+                cliente_nome: n.toUpperCase(),
+                telefone: z,
+                aniversario: aniversarioSalvar,
                 data_atendimento: dataSelecionada,
-                horario: horaSelecionada, 
-                servico: svs.join(", "), 
+                horario: horaSelecionada,
+                servico: servicosStr,
                 status: "Aguardando",
-                valor: parseFloat(totalStr.replace('R$ ', '').replace(',', '.'))
-             }]);
+                valor: valorNum,
+                origem: "fidelidade",
+                presenca: "Pendente"
+            }]);
 
             if(!error) {
-                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\nNome: ${n.toUpperCase()}\nData: ${dataSelecionada.split('-').reverse().join('/')}\nHora: ${horaSelecionada}\nServiços: ${svs.join(", ")}\nTotal: ${totalStr}\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
+                // 2) Espelho no portal admin (tabela já existente) — identificado como Cliente fidelidade
+                // Não altera estrutura: só grava registro legível na lista de Agendamentos
+                try {
+                    await _supabase.from('agendamentos').insert([{
+                        cliente_nome: n.toUpperCase(),
+                        telefone: z,
+                        aniversario: aniversarioSalvar,
+                        data_atendimento: dataSelecionada,
+                        horario: horaSelecionada,
+                        servico: "[CLIENTE FIDELIDADE] " + servicosStr,
+                        status: "Aguardando",
+                        valor: valorNum,
+                        presenca: "Pendente"
+                    }]);
+                } catch (e) {
+                    console.warn("Espelho no portal (agendamentos) falhou, mas o agendamento Natal foi salvo:", e);
+                }
+
+                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\nNome: ${n.toUpperCase()}\nData: ${dataSelecionada.split('-').reverse().join('/')}\nHora: ${horaSelecionada}\nServiços: ${servicosStr}\nTotal: ${totalStr}\n\nCliente Fidelidade\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
                 window.location.href = `https://api.whatsapp.com/send?phone=5571992447638&text=${encodeURIComponent(msg)}`;
             } else { 
                 alert("⚠️ Este horário acabou de ser ocupado por outra cliente! Por favor, selecione outro horário.");
@@ -1118,7 +1141,7 @@
         }
 
         async function carregarPrecosExtras() {
-            const { data } = await _supabase.from('precos_extras').select('*');
+            const { data } = await _supabase.from('precos_extras_natal').select('*');
             precosExtrasMap = {};
             (data || []).forEach(row => {
                 const key = (row.servico_nome || row.nome || '').toString().toUpperCase().trim();
@@ -1149,7 +1172,7 @@
         }
 
         async function montarListaServicosExtra() {
-            const { data } = await _supabase.from('servicos').select('*').order('nome');
+            const { data } = await _supabase.from('servicos_natal').select('*').order('nome');
             const box = document.getElementById('extraListaServicos');
             if (!data || data.length === 0) {
                 box.innerHTML = '<p class="text-center text-zinc-400 py-4">Nenhum serviço</p>';
@@ -1205,20 +1228,40 @@
             btnText.innerText = "Registrando...";
             const totalStr = document.getElementById('extraTotalDisplay').innerText;
             const aniversarioSalvar = anivers.length === 5 ? anivers : null;
+            const valorNum = parseFloat(totalStr.replace('R$ ', '').replace('.', '').replace(',', '.')) || 0;
+            const servicosStr = svs.join(", ") + " [HORÁRIO EXTRA]";
 
-            const { error } = await _supabase.from('agendamentos').insert([{
+            const { error } = await _supabase.from('agendamentos_natal').insert([{
                 cliente_nome: n.toUpperCase(),
                 telefone: z,
                 aniversario: aniversarioSalvar,
                 data_atendimento: extraDataSelecionada,
                 horario: extraHoraSelecionada,
-                servico: svs.join(", ") + " [HORÁRIO EXTRA]",
+                servico: servicosStr,
                 status: "Aguardando",
-                valor: parseFloat(totalStr.replace('R$ ', '').replace('.', '').replace(',', '.')) || 0
+                valor: valorNum,
+                origem: "fidelidade",
+                presenca: "Pendente"
             }]);
 
             if (!error) {
-                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\n*HORÁRIO EXTRA*\n\nNome: ${n.toUpperCase()}\nData: ${extraDataSelecionada.split('-').reverse().join('/')}\nHora: ${extraHoraSelecionada} *(HORÁRIO EXTRA)*\nServiços: ${svs.join(", ")}\nTotal: ${totalStr}\n\n*Estou ciente da atualização dos valores por ter selecionado um horário extra.*\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
+                try {
+                    await _supabase.from('agendamentos').insert([{
+                        cliente_nome: n.toUpperCase(),
+                        telefone: z,
+                        aniversario: aniversarioSalvar,
+                        data_atendimento: extraDataSelecionada,
+                        horario: extraHoraSelecionada,
+                        servico: "[CLIENTE FIDELIDADE] " + servicosStr,
+                        status: "Aguardando",
+                        valor: valorNum,
+                        presenca: "Pendente"
+                    }]);
+                } catch (e) {
+                    console.warn("Espelho no portal (agendamentos) falhou, mas o agendamento Natal foi salvo:", e);
+                }
+
+                const msg = `Agendamento Exclusivo Rivi Silva 💅✨\n\n*HORÁRIO EXTRA*\n\nNome: ${n.toUpperCase()}\nData: ${extraDataSelecionada.split('-').reverse().join('/')}\nHora: ${extraHoraSelecionada} *(HORÁRIO EXTRA)*\nServiços: ${svs.join(", ")}\nTotal: ${totalStr}\n\nCliente Fidelidade\n\n*Estou ciente da atualização dos valores por ter selecionado um horário extra.*\n\nSegue o meu comprovante com o sinal para garantir o meu agendamento!`;
                 window.location.href = `https://api.whatsapp.com/send?phone=5571992447638&text=${encodeURIComponent(msg)}`;
             } else {
                 alert("⚠️ Este horário acabou de ser ocupado. Escolha outro.");
